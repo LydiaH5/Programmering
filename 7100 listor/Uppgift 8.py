@@ -68,22 +68,42 @@ while spela == "s":
         print("")
     print("Dina tärningar är nu", tärningar)
     tärningar.sort()
-    #if inget resultat passar:
-            #roresult = 1 
-    if 1 not in tärningar or 1 in tärningar and 1 in kategorier: #ettor ej möjlig
-        if 2 not in tärningar or 2 in tärningar and 2 in kategorier: #tvåor ej möjlig
-            if 3 not in tärningar or 3 in tärningar and 3 in kategorier: #treor ej möjlig
-                if 4 not in tärningar or 4 in tärningar and 4 in kategorier: #fyror ej möjlig
-                    if 5 not in tärningar or 5 in tärningar and 5 in kategorier: #femmor ej möjlig
-                        if 6 not in tärningar or 6 in tärningar and 6 in kategorier: #sexor ej möjlig
-                            if 15 in kategorier or tärningar[0] != tärningar[4]: #yatzy ej möjlig
-                                if 11 in kategorier #gör så att de andra inte heller är möjliga 
-                            if 7 in kategorier or tärningar[0] != tärningar[1] and tärningar[1] != tärningar[2] and tärningar[2] != tärningar[3] and tärningar[3] != tärningar[4]: #par ej möjlig 
-                                if 12 in kategorier and 13 in kategorier and 14 in kategorier:
-                                    noresult = noresult + 1  
-            
-        if 2 not in tärningar and 2 in kategorier: 
-    if noresult == 1:
+    tärningar.reverse()
+    tvåpar = "false"
+    tretal = "false"
+    fyrtal = "false"
+    kåk = "false"
+    litenstege = "false"
+    storstege = "false"
+    if tärningar[0] == tärningar[1] and tärningar[2] == tärningar[3] or tärningar[0] == tärningar[1] and tärningar[3] == tärningar[4] or tärningar[1] == tärningar[2] and tärningar[3] == tärningar[4]:
+        tvåpar = "true"
+    if tärningar[0] == tärningar[2] or tärningar[1] == tärningar[3] or tärningar[2] == tärningar[4]:
+        tretal = "true"
+    if tärningar[0] == tärningar[3] or tärningar[1] == tärningar[4]:
+        fyrtal = "true"
+    if tärningar[0] == tärningar[1] and tärningar[2] == tärningar[4] or tärningar[0] == tärningar[2] and tärningar[3] == tärningar[4]:
+        kåk = "true"
+    if 1 in tärningar and 2 in tärningar and 3 in tärningar and 4 in tärningar and 5 in tärningar:
+        litenstege = "true"
+    if 2 in tärningar and 3 in tärningar and 4 in tärningar and 5 in tärningar and 6 in tärningar:
+        storstege = "true"
+    if 1 not in tärningar or 1 in tärningar and 1 in kategorier:
+        if 2 not in tärningar or 2 in tärningar and 2 in kategorier:
+            if 3 not in tärningar or 3 in tärningar and 3 in kategorier:
+                if 4 not in tärningar or 4 in tärningar and 4 in kategorier:
+                    if 5 not in tärningar or 5 in tärningar and 5 in kategorier:
+                        if 6 not in tärningar or 6 in tärningar and 6 in kategorier:
+                            if 15 in kategorier or tärningar[0] != tärningar[4]:
+                                if 14 in kategorier: 
+                                    if 13 in kategorier or storstege == "false": 
+                                        if 12 in kategorier or litenstege == "false":
+                                            if 11 in kategorier or kåk == "false":
+                                                if 10 in kategorier or fyrtal == "false":
+                                                    if 9 in kategorier or tretal == "false":
+                                                        if 8 in kategorier or tvåpar == "false":
+                                                            if 7 in kategorier or tärningar[0] != tärningar[1] and tärningar[1] != tärningar[2] and tärningar[2] != tärningar[3] and tärningar[3] != tärningar[4]:
+                                                                noresult = 1
+    if noresult ==s 1:
         print("Ditt resultat passar  inte någonstans! Välj en kategori att stryka:\n\nEttor (1) (", p1, "poäng)\nTvåor (2) (", p2, "poäng)\nTreor (3) (", p3, "poäng)\nFyror (4) (", p4, "poäng)\nFemmor (5) (", p5, "poäng)\nSexor (6) (", p6, "poäng)\nEtt par (7) (", p7, "poäng)\nTvå par (8) (", p8, "poäng)\nTretal (9) (", p9, "poäng)\nFyrtal (10) (", p10, "poäng)\nLiten stege (11) (", p11, "poäng)\nStor stege (12) (", p12, "poäng)\nKåk (13) (", p13, "poäng)\nChans (14) (", p14, "poäng)")
         släng = input("Yatzy (15) (", p15, "poäng)\n")
         if släng == "1":
@@ -147,8 +167,7 @@ while spela == "s":
             if 15 not in kategorier:
                 kategorier.append(15)
         print("Runda", runda, "avslutad. Dina totala poäng är", poäng)
-        spela = input("Skriv s för att påbörja nästa runda.")
-    tärningar.reverse()                  
+        spela = input("Skriv s för att påbörja nästa runda.")           
     placera = input("Välj en av följande kategorier att placera resultatet i:\n\n Ettor (1)\n Tvåor (2)\n Treor (3)\n Fyror (4)\n Femmor (5)\n Sexor (6)\n Ett par (7)\n Två par (8)\n Tretal (9)\n Fyrtal (10)\n Kåk (11)\n Liten stege (12)\n Stor stege (13)\n Chans (14)\n Yatzy (15)\n")
     while placera != 0:
         while placera == "1":
@@ -296,7 +315,7 @@ while spela == "s":
         while placera == "8":
             if 8 in kategorier:
                 placera = input("Kategorin Två par är upptagen. Välj en annan kategori.\n")
-            elif tärningar[0] == tärningar[1] and tärningar[2] == tärningar[3] or tärningar[0] == tärningar[1] and tärningar[3] == tärningar[4] or tärningar[1] == tärningar[2] and tärningar[3] == tärningar[4]: 
+            elif tvåpar == "true": 
                 placera = 0
                 kategorier.append(8)
                 if tärningar[0] == tärningar[1] and tärningar[2] == tärningar[3]: 
@@ -316,7 +335,7 @@ while spela == "s":
         while placera == "9":
             if 9 in kategorier:
                 placera = input("Kategorin Tretal är upptagen. Välj en annan kategori.\n")
-            elif tärningar[0] == tärningar[2] or tärningar[1] == tärningar[3] or tärningar[2] == tärningar[4]:
+            elif tretal == "true":
                 placera = 0
                 kategorier.append(9)
                 if tärningar[0] == tärningar[2]:
@@ -336,7 +355,7 @@ while spela == "s":
         while placera == "10":
             if 10 in kategorier:
                 placera = input("Kategorin Fyrtal är upptagen. Välj en annan kategori.\n")
-            elif tärningar[0] == tärningar[3] or tärningar[1] == tärningar[4]:
+            elif fyrtal == "true":
                 placera = 0
                 kategorier.append(10)
                 if tärningar[0] == tärningar[3]:
@@ -354,7 +373,7 @@ while spela == "s":
         while placera == "11":
             if 11 in kategorier:
                 placera = input("Kategorin Kåk är upptagen. Välj en annan kategori.\n")
-            elif tärningar[0] == tärningar[1] and tärningar[2] == tärningar[4] or tärningar[0] == tärningar[2] and tärningar[3] == tärningar[4]:
+            elif kåk == "true":
                 placera = 0
                 kategorier.append(11)
                 p11 = p11 + sum(tärningar)
@@ -369,7 +388,7 @@ while spela == "s":
         while placera == "12":
             if 12 in kategorier:
                 placera = input("Kategorin Liten stege är upptagen. Välj en annan kategori.\n")
-            elif 1 in tärningar and 2 in tärningar and 3 in tärningar and 4 in tärningar and 5 in tärningar:
+            elif litenstege == "true":
                 placera = 0
                 kategorier.append(12)
                 p12 = p12 + 15
@@ -384,7 +403,7 @@ while spela == "s":
         while placera == "13":
             if 13 in kategorier:
                 placera = input("Kategorin Stor stege är upptagen. Välj en annan kategori.\n")
-            elif 2 in tärningar and 3 in tärningar and 4 in tärningar and 5 in tärningar and 6 in tärningar:
+            elif storstege == "true":
                 placera = 0
                 kategorier.append(13)
                 p13 = p13 + 20

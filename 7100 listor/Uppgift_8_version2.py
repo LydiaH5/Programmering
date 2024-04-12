@@ -32,16 +32,28 @@ while spela == "s":
 
     #testa vilka placera som går:
     tärningar.sort()
+    result = []
     noresult = [0]
-    for i in "123456": 
+    for i in range(1, 7):
         if i not in tärningar or i in kategorier: 
-            noresult.append(int(i)) 
+            noresult.append(i) 
             #(lägger till 1-6 i noresult)
     for i in tärningar:
         n = tärningar.count
         if n > 1:
-            par = "true" 
-            #(tittar om det finns par)
+            result.append(i)
+    if result[0] != result[1] or 7 in kategorier:
+        noresult.append(7)
+    if result[2] != result[3] or 8 in kategorier:
+        if result[0] != result[2] and result[3] != result[4]:
+            noresult.append(8)
+    if result[0] != result[2] or result[2] != result[4] or 9 in kategorier:
+        noresult.append(9)
+  #fortsätt här nästa gång
+    if tärningar[0] != tärningar[4] or 15 in kategorier:
+        noresult.append(15)
+        #lägger till yatzy i noresult
+    
     if sum(noresult) == 120: #if inget resultat passar:
         print("Ditt resultat passar  inte någonstans! Välj en kategori att stryka:\n\nEttor (1) (", p[1], "poäng)\nTvåor (2) (", p[2], "poäng)\nTreor (3) (", p[3], "poäng)\nFyror (4) (", p[4], "poäng)\nFemmor (5) (", p[5], "poäng)\nSexor (6) (", p[6], "poäng)\nEtt par (7) (", p[7], "poäng)\nTvå par (8) (", p[8], "poäng)\nTretal (9) (", p[9], "poäng)\nFyrtal (10) (", p[10], "poäng)\nLiten stege (11) (", p[11], "poäng)\nStor stege (12) (", p[12], "poäng)\nKåk (13) (", p[13], "poäng)\nChans (14) (", p[14], "poäng)")
         släng = int(input("Yatzy (15) (", p[15], "poäng)\n"))
@@ -53,15 +65,17 @@ while spela == "s":
     placera = int(input("Välj en av följande kategorier att placera resultatet i:\n\n Ettor (1)\n Tvåor (2)\n Treor (3)\n Fyror (4)\n Femmor (5)\n Sexor (6)\n Ett par (7)\n Två par (8)\n Tretal (9)\n Fyrtal (10)\n Kåk (11)\n Liten stege (12)\n Stor stege (13)\n Chans (14)\n Yatzy (15)\n"))
     while placera != 0:
         if placera in kategorier:
-            placera = input("Kategorin", kategorier2[placera], "är upptagen. Välj en annan kategori.\n")
+            placera = int(input("Kategorin", kategorier2[placera], "är upptagen. Välj en annan kategori.\n"))
         elif placera in noresult:
-            placera = input("Du har inga", kategorier2[placera], "att placera! Välj en annan kategori.\n")
+            placera = int(input("Du har inga", kategorier2[placera], "att placera! Välj en annan kategori.\n"))
         else:
             if placera < 7:
                 for tärning in tärningar:
                     if tärning == placera:
-                        p[placera] = p[placera] + placera 
-        #ge poäng
+                        p[placera] = p[placera] + placera
+            if placera == 15:
+             p[15] = p[15] + 50
+                
             kategorier.append(placera) 
             poäng = poäng + p[placera]
         if p[1] + p[2] + p[3] + p[4] + p[5] + p[6] >= 63: 

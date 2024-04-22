@@ -4,6 +4,7 @@ poäng = 0
 p = []
 for i in range(16):
     p.append(0)
+giltigt = 1
 runda = 0
 kategorier = []
 kategorier2 = [0, "Ettor", "Tvåor", "Treor", "Fyror", "Femmor", "Sexor", "Par", "Tvåpar", "Tretal", "Fyrtal", "Kåk", "Liten stege", "Stor stege", "Chans", "Yatzy"]
@@ -17,18 +18,21 @@ while spela == "s":
     print("Dina första 5 tärningar blev:", tärningar)
     while delrunda < 2: 
         kasta = input("Välj tärningar från 1-5 att kasta eller 0 för att behålla alla.\n")    
-        kast = []
-        for char in kasta:
-            if char.isdigit():
-                kast.append(int(char))
-        if 0 in kast:
-            delrunda = 2
-        else:
-            for i in kast:
-                tärningar.pop(i-1)
-                tärningar.insert(i-1, random.randint(1, 6))
-        print("Dina tärningar är nu", tärningar)
-        delrunda = delrunda + 1
+        while kasta != 0: 
+            kast = []
+            for char in kasta:
+                if char.isdigit():
+                    kast.append(int(char))
+            if sum(kast) == 0:
+                kasta = input("Ogiltigt! Skriv minst en siffra.\n")
+            elif 0 in kast:
+                delrunda = 2
+            else:
+                for i in kast:
+                    tärningar.pop(i-1)
+                    tärningar.insert(i-1, random.randint(1, 6))
+                print("Dina tärningar är nu", tärningar)
+                delrunda = delrunda + 1
     tärningar.sort()
     result = []
     noresult = [0]
@@ -39,21 +43,23 @@ while spela == "s":
         n = tärningar.count(i)
         if n > 1:
             result.append(i)
-    result.extend(["a", "b", "c", "d", "e"])
     for i in range(6, 16):
         if i in kategorier:
             noresult.append(i)
-    if result[0] != result[1]:
-        noresult.append(7)
-    if result[2] != result[3]:
-        noresult.append(8)
-    if result[0] != result[2] or result[2] != result[4]:
-        noresult.append(9)
-    if result[0] != result[3]:
-        noresult.append(10)
-    if (result[0] != result[1] and result[2] != result[4] 
-        or result[0] != result[2] and result[3] != result[4]):
-            noresult.append(11)
+    if len(result) > 0:
+        if result[0] != result[1]:
+            noresult.append(7)
+    if len(result) > 2:
+        if result[2] != result[3]:
+            noresult.append(8)
+        if result[0] != result[3]:
+            noresult.append(10)
+    if len(result) == 5:
+        if result[0] != result[2] or result[2] != result[4]:
+            noresult.append(9)
+        if (result[0] != result[1] and result[2] != result[4] 
+            or result[0] != result[2] and result[3] != result[4]):
+                noresult.append(11)
     if 1 and 2 and 3 and 4 and 5 not in tärningar:
         noresult.append(12) 
     if 2 and 3 and 4 and 5 and 6 not in tärningar:
@@ -66,10 +72,10 @@ while spela == "s":
         p[släng] = 0
         if släng not in kategorier:
             kategorier.append(släng)
-        print("Runda", runda, "avslutad. Dina totala poäng är", poäng)
+        print("Runda", runda, "avslutad. Dina totala poäng:", poäng)
         spela = input("Skriv s för att påbörja nästa runda.")         
     placera = int(input("Välj en av följande kategorier att placera resultatet i:\n\n Ettor (1)\n Tvåor (2)\n Treor (3)\n Fyror (4)\n Femmor (5)\n Sexor (6)\n Ett par (7)\n Två par (8)\n Tretal (9)\n Fyrtal (10)\n Kåk (11)\n Liten stege (12)\n Stor stege (13)\n Chans (14)\n Yatzy (15)\n"))
-    while placera != 0:
+    while placera != "0":
         if placera in kategorier:
             placera = int(input("Kategorin", kategorier2[placera], "är upptagen. Välj en annan kategori.\n"))
         elif placera in noresult:
@@ -78,25 +84,25 @@ while spela == "s":
             if placera < 7:
                 for i in tärningar:
                     if i == placera:
-                        p[placera] == p[placera] + placera
+                        p[placera] = p[placera] + placera
             if placera == 7:
-                p[7] == p[7] + result[-1] + result[-2]
+                p[7] = p[7] + result[-1] + result[-2]
             if placera == 8:
                 if result[2] == result[3]:
-                    p[8] == p[8] + result[0] + result[1] + result[2] + result[3]
+                    p[8] = p[8] + result[0] + result[1] + result[2] + result[3]
                 else:
-                    p[8] == p[8] + result[0] + result[1] + result[3] + result[4]
+                    p[8] = p[8] + result[0] + result[1] + result[3] + result[4]
             if placera == 9:
                 if result[0] == result[2]:
                     p[9] = p[9] + result[0] + result[1] + result[2]
                 else:
                     p[9] = p[9] + result[-1] + result[-2] + result[-3]
             if placera == 10:
-                p[10] == p[10] + result[-1] + result[-2] + result[-3] + result[-4]
+                p[10] = p[10] + result[-1] + result[-2] + result[-3] + result[-4]
             if placera == 11 or placera == 14:
-                p[placera] == p[placera] + tärningar.sum()
+                p[placera] = p[placera] + sum(tärningar)
             if placera == 12:
-                p[12] == p[12] + 15
+                p[12] = p[12] + 15
             if placera == 13:
                 p[13] = p[13] + 20
             if placera == 15:
@@ -109,6 +115,7 @@ while spela == "s":
         if sum(kategorier) == 120:
                 print("Ditt protokoll är fyllt! Spelet är nu avslutat. Ditt resultat:", poäng, "poäng!") 
         else:
-            print("Runda", runda, "avslutad. Du har nu", p[placera], "poäng i kategorin", kategorier2[placera], "och dina totala poäng är", poäng)
+            print("Runda", runda, "avslutad. Du har nu", p[placera], "poäng i kategorin", kategorier2[placera], "och ditt totala resultat är", poäng, "poäng.")
             spela = input("Skriv s för att påbörja nästa runda.\n")
-    print("Du hittade ett easter egg! Men programmet har krashat, så du får nu starta om.")
+        placera = "0"
+print("Ogiltigt! Starta om programmet.")

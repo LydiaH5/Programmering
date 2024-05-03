@@ -7,7 +7,7 @@ for i in range(16):
 giltigt = 1
 runda = 0
 kategorier = []
-kategorier2 = [0, "Ettor", "Tvåor", "Treor", "Fyror", "Femmor", "Sexor", "Par", "Tvåpar", "Tretal", "Fyrtal", "Kåk", "Liten stege", "Stor stege", "Chans", "Yatzy"]
+kategorier2 = [0, "Ettor", "Tvåor", "Treor", "Fyror", "Femmor", "Sexor", "Par", "Två par", "Tretal", "Fyrtal", "Kåk", "Liten stege", "Stor stege", "Chans", "Yatzy"]
 spela = input("Yatzy! Skriv s för att påbörja spel.\n")
 while spela == "s":
     runda = runda + 1
@@ -37,55 +37,47 @@ while spela == "s":
         delrunda = delrunda + 1
     tärningar.sort()
     result = []
-    noresult = [0]
-    for i in range(1, 7):
-        if i not in tärningar or i in kategorier: 
-            noresult.append(i) 
+    noresult = [] 
     for i in tärningar:
         n = tärningar.count(i)
         if n > 1:
             result.append(i)
-    for i in range(7, 16):
-        if i in kategorier:
-            noresult.append(i)
+    if len(result) == 0:
+        noresult.append(7)
     if len(result) <= 2:
-        noresult.extend([8, 9, 10])
-        if len(result) == 0:
-            noresult.append(7)
-    if len(result) > 2:
-        if result[0] != result[2]:
-            noresult.append(9)
-    if len(result) > 3:
-        if result[2] != result[3]:
-            noresult.append(8)
+        noresult.extend([8, 9, 10, 11, 15])
+    if len(result) == 3:
+        noresult.extend([8, 10, 11, 15])
+    if len(result) == 4:
+        noresult.extend([9, 11, 15])
         if result[0] != result[3]:
             noresult.append(10)
-    if noresult < 5:
-        noresult.append(11)
     if len(result) == 5:
-        if result[2] != result[4]:
-            noresult.append(9)
-        if (result[0] != result[1] and result[2] != result[4] 
-            or result[0] != result[2] and result[3] != result[4]):
-                noresult.append(11)
+        if result[0] != result[3]:
+            noresult.extend([10, 15])
+        else:
+            noresult.append(11)
     if tärningar != [1, 2, 3, 4, 5]:
         noresult.append(12) 
     if tärningar != [2, 3, 4, 5, 6]:
         noresult.append(13)
-    if tärningar[0] != tärningar[4]:
-        noresult.append(15)
-    print(noresult)
+    for i in range(1, 16):
+        if i not in noresult:
+            if i < 7 and i not in tärningar or i in kategorier: 
+                noresult.append(i)
+    noresult.sort()
     if sum(noresult) == 120:
         print("Ditt resultat passar  inte någonstans! Välj en kategori att stryka:\n\nEttor (1) (", p[1], "poäng), Tvåor (2) (", p[2], "poäng), Treor (3) (", p[3], "poäng)\nFyror (4) (", p[4], "poäng), Femmor (5) (", p[5], "poäng), Sexor (6) (", p[6], "poäng)\nEtt par (7) (", p[7], "poäng), Två par (8) (", p[8], "poäng), Tretal (9) (", p[9], "poäng)\nFyrtal (10) (", p[10], "poäng), Liten stege (11) (", p[11], "poäng), Stor stege (12) (", p[12], "poäng)")
-        släng = int(input("Kåk (13) (" + p[13] + " poäng), Chans (14) ( " + p[14] + " poäng), Yatzy (15) ( " + p[15] + " poäng)\n"))
+        släng = int(input("Kåk (13) (" + str(p[13]) + " poäng), Chans (14) ( " + str(p[14]) + " poäng), Yatzy (15) ( " + str(p[15]) + " poäng)\n"))
         while släng == 0 or släng > 15:
             släng = int(input("Ogiltigt! Välj en siffra från 1-15.\n"))
         p[släng] = 0
         if släng not in kategorier:
             kategorier.append(släng)
         print("Runda", runda, "avslutad. Dina totala poäng:", poäng)
-        spela = input("Skriv s för att påbörja nästa runda.")         
-    placera = int(input("Välj en av följande kategorier att placera resultatet i:\n\n Ettor (1), Tvåor (2), Treor (3), Fyror (4), Femmor (5)\n Sexor (6), Ett par (7), Två par (8), Tretal (9), Fyrtal (10)\n Kåk (11), Liten stege (12), Stor stege (13), Chans (14), Yatzy (15)\n"))
+        spela = input("Skriv s för att påbörja nästa runda.")       
+    print("Välj en kategori att placera resultatet i:\n\n Ettor (1), Tvåor (2), Treor (3), Fyror (4), Femmor (5)\n Sexor (6), Ett par (7), Två par (8), Tretal (9), Fyrtal (10)\n Kåk (11), Liten stege (12), Stor stege (13), Chans (14), Yatzy (15)")
+    placera = int(input("(Otillgängliga: " + str(noresult) + ")\n"))
     while placera != "0":
         while placera == 0 or placera > 15:
             placera = int(input("Ogiltigt! Välj en siffra från 1-15.\n"))

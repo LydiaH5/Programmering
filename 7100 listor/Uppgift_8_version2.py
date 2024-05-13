@@ -1,5 +1,4 @@
 import random 
-print("start")
 poäng = 0
 p = []
 for i in range(16):
@@ -118,8 +117,8 @@ while spela == "s":
                 if placera == 15:
                     p[15] = p[15] + 50
                 kategorier.append(placera) 
-                poäng = poäng + p[placera]
-                if p[1] + p[2] + p[3] + p[4] + p[5] + p[6] >= 63: 
+                poäng = poäng + p[placera] #nästa gång: se till att detta bara händer 1 gång och att "-" blir 0 vid poängräkning
+                if p[1] + p[2] + p[3] + p[4] + p[5] + p[6] >= 63:  
                     poäng = poäng + 50
                     print("Dina poäng i övre halvan är nu över 63. 50 poäng bonus!")
                 if sum(kategorier) == 120:

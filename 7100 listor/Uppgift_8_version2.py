@@ -17,13 +17,15 @@ while spela == "s":
         tärningar.append(random.randint(1, 6))
     print("Dina första 5 tärningar blev:", tärningar)
     while delrunda < 2: 
-        kasta = input("Välj tärningar från 1-5 att kasta eller 0 för att behålla alla.\n")    
-        while kasta != 0:
+        kasta = input("Välj tärningar från 1-5 att kasta eller 0 för att behålla alla. Skriv u för att se vilka kategorier som är upptagna.\n")    
+        while kasta == "u":
+            kasta = input("Dina upptagna kategorier är " + str(kategorier) + ".\n")
+        while kasta != 0 and kasta != "u":
             kast = []
             for char in kasta:
                 if char.isdigit():
                     kast.append(int(char))
-                if sum(kast) == 0 and "0" not in kasta:
+                if sum(kast) == 0 and kasta != "0":
                     kasta = input("Ogiltigt! Skriv minst en siffra.\n")
                 else:
                     kasta = 0
@@ -72,16 +74,20 @@ while spela == "s":
         släng = int(input("Stor stege (13) (" + str(p[13]) + " poäng), Chans (14) (" + str(p[14]) + " poäng), Yatzy (15) (" + str(p[15]) + " poäng)\n"))
         while släng == 0 or släng > 15:
             släng = int(input("Ogiltigt! Välj en siffra från 1-15.\n"))
-        if p[släng] == "-": 
-            släng = int(input("Ogiltigt! Du har redan strukit den här kategorin."))
+        while p[släng] == "-": 
+            släng = int(input("Ogiltigt! Du har redan strukit den här kategorin.\n"))
         else:
             if släng not in kategorier:
                 kategorier.append(släng)
             poäng = poäng - p[släng]
             p[släng] = "-"
-            strukna.append(släng)
-            print("Runda", runda, "avslutad. Dina totala poäng:", poäng)
-            spela = input("Skriv s för att påbörja nästa runda.\n")
+            if sum(kategorier) == 120:
+                print("Ditt protokoll är fyllt! Spelet är nu avslutat. Ditt resultat:", poäng, "poäng!")
+                spela = 0
+            else:
+                strukna.append(släng)
+                print("Runda", runda, "avslutad. Dina totala poäng:", poäng)
+                spela = input("Skriv s för att påbörja nästa runda.\n")
     if delrunda > 1:       
         print("Välj en kategori att placera resultatet i:\n\n Ettor (1), Tvåor (2), Treor (3), Fyror (4), Femmor (5)\n Sexor (6), Ett par (7), Två par (8), Tretal (9), Fyrtal (10)\n Kåk (11), Liten stege (12), Stor stege (13), Chans (14), Yatzy (15)")
         placera = int(input("(Otillgängliga: " + str(noresult) + ")\n"))
@@ -126,7 +132,7 @@ while spela == "s":
                 for i in strukna:
                     p[i] = "-"
                 if 1 and 2 and 3 and 4 and 5 and 6 in kategorier and FåttBonus == False:
-                    if p[1] + p[2] + p[3] + p[4] + p[5] + p[6] <= 63:
+                    if p[1] + p[2] + p[3] + p[4] + p[5] + p[6] < 63:
                         FåttBonus = True  
                     else:
                         poäng = poäng + 50
@@ -134,6 +140,7 @@ while spela == "s":
                         FåttBonus = True
                 if sum(kategorier) == 120:
                         print("Ditt protokoll är fyllt! Spelet är nu avslutat. Ditt resultat:", poäng, "poäng!") 
+                        spela = 0
                 else:
                     print("Runda", runda, "avslutad. Du har nu", p[placera], "poäng i kategorin", kategorier2[placera], "och ditt totala resultat är", poäng, "poäng.")
                     spela = input("Skriv s för att påbörja nästa runda.\n")

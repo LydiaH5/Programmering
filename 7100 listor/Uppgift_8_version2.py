@@ -145,4 +145,5 @@ while spela == "s":
                     print("Runda", runda, "avslutad. Du har nu", p[placera], "poäng i kategorin", kategorier2[placera], "och ditt totala resultat är", poäng, "poäng.")
                     spela = input("Skriv s för att påbörja nästa runda.\n")
                 placera = "0"
-print("Ogiltigt! Starta om programmet.")
+if sum(kategorier) != 120:
+    print("Ogiltigt! Starta om programmet.")

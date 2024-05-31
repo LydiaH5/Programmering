@@ -2,7 +2,7 @@ import random
 import copy
 runda = 0
 kategorier2 = [0, "Ettor", "Tvåor", "Treor", "Fyror", "Femmor", "Sexor", "Par", "Två par", "Tretal", "Fyrtal", "Kåk", "Liten stege", "Stor stege", "Chans", "Yatzy"]
-en_spelare = {"p": [], "poäng": 0, "kategorier": [], "strukna": [], "FåttBonus": False}
+en_spelare = {"p": [], "poäng": 0, "kategorier": [], "strukna": [], "FåttBonus": False, "Finished": False}
 spelare = {}
 antalspelare = int(input("Yatzy! Välj antal spelare.\n"))
 for i in range(antalspelare): 
@@ -11,139 +11,142 @@ for i in range(antalspelare):
         spelare[str(i + 1)]["p"].append(0) #lägger till 0:or i spelarnas poäng
 spela = input("Skriv s för att påbörja spel.\n")
 while spela == "s":
+    runda = runda + 1
     for a in range(antalspelare):
-        runda = runda + 1
-        delrunda = 0
-        tärningar = []
-        for i in range(5):
-            tärningar.append(random.randint(1, 6))
-        print("Spelare " + str(a + 1) + ", dina första 5 tärningar blev:", tärningar)
-        while delrunda < 2: 
-            kasta = input("Välj tärningar från 1-5 att kasta eller 0 för att behålla alla. Skriv u för att se vilka kategorier som är upptagna.\n")    
-            while kasta == "u":
-                kasta = input("Dina upptagna kategorier är " + str(spelare[str(a + 1)]["kategorier"]) + ".\n")
-            while kasta != 0 and kasta != "u":
-                kast = []
-                for char in kasta:
-                    if char.isdigit():
-                        kast.append(int(char))
-                    if sum(kast) == 0 and kasta != "0":
-                        kasta = input("Ogiltigt! Skriv minst en siffra.\n")
-                    else:
-                        kasta = 0
-            if 0 in kast:
-                delrunda = 2
-            else:
-                for i in kast:
-                    tärningar.pop(i-1)
-                    tärningar.insert(i-1, random.randint(1, 6))
-            print("Dina tärningar är nu", tärningar)
-            delrunda = delrunda + 1
-        tärningar.sort()
-        result = []
-        noresult = [] 
-        for i in tärningar:
-            n = tärningar.count(i)
-            if n > 1:
-                result.append(i)
-        if len(result) == 0:
-            noresult.append(7)
-        if len(result) <= 2:
-            noresult.extend([8, 9, 10, 11, 15])
-        if len(result) == 3:
-            noresult.extend([8, 10, 11, 15])
-        if len(result) == 4:
-            noresult.extend([9, 11, 15])
-            if result[0] != result[3]:
-                noresult.append(10)
-        if len(result) == 5:
-            if result[0] != result[3]:
-                noresult.extend([10, 15])
-            else:
-                noresult.append(11)
-        if tärningar != [1, 2, 3, 4, 5]:
-            noresult.append(12) 
-        if tärningar != [2, 3, 4, 5, 6]:
-            noresult.append(13)
-        for i in range(1, 16):
-            if i not in noresult:
-                if i < 7 and i not in tärningar or i in spelare[str(a + 1)]["kategorier"]: 
-                    noresult.append(i)
-        noresult.sort()
-        if sum(noresult) == 120:
-            delrunda = 1
-            print("Ditt resultat passar inte någonstans! Välj en kategori att stryka:\n\nEttor (1) (" + str(spelare[str(a + 1)]["p"][1]) + " poäng), Tvåor (2) (" + str(spelare[str(a + 1)]["p"][2]) + " poäng), Treor (3) (" + str(spelare[str(a + 1)]["p"][3]) + " poäng)\nFyror (4) (" + str(spelare[str(a + 1)]["p"][4]) + " poäng), Femmor (5) (" + str(spelare[str(a + 1)]["p"][5]) + " poäng), Sexor (6) (" + str(spelare[str(a + 1)]["p"][6]) + " poäng)\nEtt par (7) (" + str(spelare[str(a + 1)]["p"][7]) + " poäng), Två par (8) (" + str(spelare[str(a + 1)]["p"][8]) + " poäng), Tretal (9) (" + str(spelare[str(a + 1)]["p"][9]) + " poäng)\nFyrtal (10) (" + str(spelare[str(a + 1)]["p"][10]) + " poäng), Kåk (11) (" + str(spelare[str(a + 1)]["p"][11]) + " poäng), Liten stege (12) (" + str(spelare[str(a + 1)]["p"][12]) + " poäng)")
-            släng = int(input("Stor stege (13) (" + str(spelare[str(a + 1)]["p"][13]) + " poäng), Chans (14) (" + str(spelare[str(a + 1)]["p"][14]) + " poäng), Yatzy (15) (" + str(spelare[str(a + 1)]["p"][15]) + " poäng)\n"))
-            while släng == 0 or släng > 15:
-                släng = int(input("Ogiltigt! Välj en siffra från 1-15.\n"))
-            while spelare[str(a + 1)]["p"][släng] == "-": 
-                släng = int(input("Ogiltigt! Du har redan strukit den här kategorin.\n"))
-            else:
-                if släng not in spelare[str(a + 1)]["kategorier"]:
-                    spelare[str(a + 1)]["kategorier"].append(släng)
-                spelare[str(a + 1)]["poäng"] = spelare[str(a + 1)]["poäng"] - spelare[str(a + 1)]["p"][släng]
-                spelare[str(a + 1)]["p"][släng] = "-"
-                if sum(spelare[str(a + 1)]["kategorier"]) == 120:
-                    print("Ditt protokoll är fyllt! Spelet är nu avslutat. Ditt resultat:", spelare[str(a + 1)]["poäng"], "poäng!")
-                    spela = 0
+        if spelare[str(a + 1)]["Finished"] == False:
+            delrunda = 0
+            tärningar = []
+            for i in range(5):
+                tärningar.append(random.randint(1, 6))
+            print("Spelare " + str(a + 1) + ", dina första 5 tärningar blev:", tärningar)
+            while delrunda < 2: 
+                kasta = input("Välj tärningar från 1-5 att kasta eller 0 för att behålla alla. Skriv u för att se vilka kategorier som är upptagna.\n")    
+                while kasta == "u":
+                    kasta = input("Dina upptagna kategorier är " + str(spelare[str(a + 1)]["kategorier"]) + ".\n")
+                while kasta != 0 and kasta != "u":
+                    kast = []
+                    for char in kasta:
+                        if char.isdigit():
+                            kast.append(int(char))
+                        if sum(kast) == 0 and kasta != "0":
+                            kasta = input("Ogiltigt! Skriv minst en siffra.\n")
+                        else:
+                            kasta = 0
+                if 0 in kast:
+                    delrunda = 2
                 else:
-                    spelare[str(a + 1)]["strukna"].append(släng)
-                    print("Runda", runda, "avslutad. Dina totala poäng:", spelare[str(a + 1)]["poäng"])
-                    spela = input("Skriv s för att påbörja nästa runda.\n")
-        if delrunda > 1:       
-            print("Välj en kategori att placera resultatet i:\n\n Ettor (1), Tvåor (2), Treor (3), Fyror (4), Femmor (5)\n Sexor (6), Ett par (7), Två par (8), Tretal (9), Fyrtal (10)\n Kåk (11), Liten stege (12), Stor stege (13), Chans (14), Yatzy (15)")
-            placera = int(input("(Otillgängliga: " + str(noresult) + ")\n"))
-            while placera != "0":
-                while placera == 0 or placera > 15:
-                    placera = int(input("Ogiltigt! Välj en siffra från 1-15.\n"))
-                if placera in spelare[str(a + 1)]["kategorier"]:
-                    placera = int(input("Kategorin " + kategorier2[placera] + " är upptagen. Välj en annan kategori.\n"))
-                elif placera in noresult:
-                    placera = int(input("Du har inga " + kategorier2[placera] + " att placera! Välj en annan kategori.\n"))
+                    for i in kast:
+                        tärningar.pop(i-1)
+                        tärningar.insert(i-1, random.randint(1, 6))
+                print("Dina tärningar är nu", tärningar)
+                delrunda = delrunda + 1
+            tärningar.sort()
+            result = []
+            noresult = [] 
+            for i in tärningar:
+                n = tärningar.count(i)
+                if n > 1:
+                    result.append(i)
+            if len(result) == 0:
+                noresult.append(7)
+            if len(result) <= 2:
+                noresult.extend([8, 9, 10, 11, 15])
+            if len(result) == 3:
+                noresult.extend([8, 10, 11, 15])
+            if len(result) == 4:
+                noresult.extend([9, 11, 15])
+                if result[0] != result[3]:
+                    noresult.append(10)
+            if len(result) == 5:
+                if result[0] != result[3]:
+                    noresult.extend([10, 15])
                 else:
-                    if placera < 7:
-                        for i in tärningar:
-                            if i == placera:
-                                spelare[str(a + 1)]["p"][placera] = spelare[str(a + 1)]["p"][placera] + placera
-                    if placera == 7:
-                        spelare[str(a + 1)]["p"][7] = spelare[str(a + 1)]["p"][7] + result[-1] + result[-2]
-                    if placera == 8:
-                        if result[2] == result[3]:
-                            spelare[str(a + 1)]["p"][8] = spelare[str(a + 1)]["p"][8] + result[0] + result[1] + result[2] + result[3]
-                        else:
-                            spelare[str(a + 1)]["p"][8] = spelare[str(a + 1)]["p"][8] + result[0] + result[1] + result[3] + result[4]
-                    if placera == 9:
-                        if result[0] == result[2]:
-                            spelare[str(a + 1)]["p"][9] = spelare[str(a + 1)]["p"][9] + result[0] + result[1] + result[2]
-                        else:
-                            spelare[str(a + 1)]["p"][9] = spelare[str(a + 1)]["p"][9] + result[-1] + result[-2] + result[-3]
-                    if placera == 10:
-                        spelare[str(a + 1)]["p"][10] = spelare[str(a + 1)]["p"][10] + result[-1] + result[-2] + result[-3] + result[-4]
-                    if placera == 11 or placera == 14:
-                        spelare[str(a + 1)]["p"][placera] = spelare[str(a + 1)]["p"][placera] + sum(tärningar)
-                    if placera == 12:
-                        spelare[str(a + 1)]["p"][12] = spelare[str(a + 1)]["p"][12] + 15
-                    if placera == 13:
-                        spelare[str(a + 1)]["p"][13] = spelare[str(a + 1)]["p"][13] + 20
-                    if placera == 15:
-                        spelare[str(a + 1)]["p"][15] = spelare[str(a + 1)]["p"][15] + 50
-                    spelare[str(a + 1)]["kategorier"].append(placera)
-                    for i in spelare[str(a + 1)]["strukna"]:
-                        spelare[str(a + 1)]["p"][i] = 0
-                    spelare[str(a + 1)]["poäng"] = spelare[str(a + 1)]["poäng"] + spelare[str(a + 1)]["p"][placera]
-                    for i in spelare[str(a + 1)]["strukna"]:
-                        spelare[str(a + 1)]["p"][i] = "-"
-                    if 1 and 2 and 3 and 4 and 5 and 6 in spelare[str(a + 1)]["kategorier"] and spelare[str(a + 1)]["FåttBonus"] == False:
-                        if spelare[str(a + 1)]["p"][1] + spelare[str(a + 1)]["p"][2] + spelare[str(a + 1)]["p"][3] + spelare[str(a + 1)]["p"][4] + spelare[str(a + 1)]["p"][5] + spelare[str(a + 1)]["p"][6] < 63:
-                            spelare[str(a + 1)]["FåttBonus"] = True  
-                        else:
-                            spelare[str(a + 1)]["poäng"] = spelare[str(a + 1)]["poäng"] + 50
-                            print("Dina poäng i övre halvan är nu över 63. 50 poäng bonus!")
-                            spelare[str(a + 1)]["FåttBonus"] = True
+                    noresult.append(11)
+            if tärningar != [1, 2, 3, 4, 5]:
+                noresult.append(12) 
+            if tärningar != [2, 3, 4, 5, 6]:
+                noresult.append(13)
+            for i in range(1, 16):
+                if i not in noresult:
+                    if i < 7 and i not in tärningar or i in spelare[str(a + 1)]["kategorier"]: 
+                        noresult.append(i)
+            noresult.sort()
+            if sum(noresult) == 120:
+                delrunda = 1
+                print("Ditt resultat passar inte någonstans! Välj en kategori att stryka:\n\nEttor (1) (" + str(spelare[str(a + 1)]["p"][1]) + " poäng), Tvåor (2) (" + str(spelare[str(a + 1)]["p"][2]) + " poäng), Treor (3) (" + str(spelare[str(a + 1)]["p"][3]) + " poäng)\nFyror (4) (" + str(spelare[str(a + 1)]["p"][4]) + " poäng), Femmor (5) (" + str(spelare[str(a + 1)]["p"][5]) + " poäng), Sexor (6) (" + str(spelare[str(a + 1)]["p"][6]) + " poäng)\nEtt par (7) (" + str(spelare[str(a + 1)]["p"][7]) + " poäng), Två par (8) (" + str(spelare[str(a + 1)]["p"][8]) + " poäng), Tretal (9) (" + str(spelare[str(a + 1)]["p"][9]) + " poäng)\nFyrtal (10) (" + str(spelare[str(a + 1)]["p"][10]) + " poäng), Kåk (11) (" + str(spelare[str(a + 1)]["p"][11]) + " poäng), Liten stege (12) (" + str(spelare[str(a + 1)]["p"][12]) + " poäng)")
+                släng = int(input("Stor stege (13) (" + str(spelare[str(a + 1)]["p"][13]) + " poäng), Chans (14) (" + str(spelare[str(a + 1)]["p"][14]) + " poäng), Yatzy (15) (" + str(spelare[str(a + 1)]["p"][15]) + " poäng)\n"))
+                while släng == 0 or släng > 15:
+                    släng = int(input("Ogiltigt! Välj en siffra från 1-15.\n"))
+                while spelare[str(a + 1)]["p"][släng] == "-": 
+                    släng = int(input("Ogiltigt! Du har redan strukit den här kategorin.\n"))
+                else:
+                    if släng not in spelare[str(a + 1)]["kategorier"]:
+                        spelare[str(a + 1)]["kategorier"].append(släng)
+                    spelare[str(a + 1)]["poäng"] = spelare[str(a + 1)]["poäng"] - spelare[str(a + 1)]["p"][släng]
+                    spelare[str(a + 1)]["p"][släng] = "-"
                     if sum(spelare[str(a + 1)]["kategorier"]) == 120:
-                            print("Ditt protokoll är fyllt! Spelet är nu avslutat. Ditt resultat:", spelare[str(a + 1)]["poäng"], "poäng!") 
-                            spela = 0 #se till att rundan startar om och spelaren ej längre fortsätter
-                    else:
-                        print("Runda", runda, "avslutad. Du har nu", spelare[str(a + 1)]["p"][placera], "poäng i kategorin", kategorier2[placera], "och ditt totala resultat är", spelare[str(a + 1)]["poäng"], "poäng.")
+                        print("Ditt protokoll är fyllt! Spelet är nu avslutat för spelare " + str(a + 1) + ". Ditt resultat:", spelare[str(a + 1)]["poäng"], "poäng!\n") 
+                        spelare[str(a + 1)]["Finished"] = True
+                    elif spelare[str(a + 1)]["Finished"] == False:
+                        spelare[str(a + 1)]["strukna"].append(släng)
+                        print("Runda", runda, "avslutad. Dina totala poäng:", spelare[str(a + 1)]["poäng"])
                         spela = input("Skriv s för att påbörja nästa runda.\n")
-                    placera = "0"
+            if delrunda > 1:       
+                print("Välj en kategori att placera resultatet i:\n\n Ettor (1), Tvåor (2), Treor (3), Fyror (4), Femmor (5)\n Sexor (6), Ett par (7), Två par (8), Tretal (9), Fyrtal (10)\n Kåk (11), Liten stege (12), Stor stege (13), Chans (14), Yatzy (15)")
+                placera = int(input("(Otillgängliga: " + str(noresult) + ")\n"))
+                while placera != "0":
+                    while placera == 0 or placera > 15:
+                        placera = int(input("Ogiltigt! Välj en siffra från 1-15.\n"))
+                    if placera in spelare[str(a + 1)]["kategorier"]:
+                        placera = int(input("Kategorin " + kategorier2[placera] + " är upptagen. Välj en annan kategori.\n"))
+                    elif placera in noresult:
+                        placera = int(input("Du har inga " + kategorier2[placera] + " att placera! Välj en annan kategori.\n"))
+                    else:
+                        if placera < 7:
+                            for i in tärningar:
+                                if i == placera:
+                                    spelare[str(a + 1)]["p"][placera] = spelare[str(a + 1)]["p"][placera] + placera
+                        if placera == 7:
+                            spelare[str(a + 1)]["p"][7] = spelare[str(a + 1)]["p"][7] + result[-1] + result[-2]
+                        if placera == 8:
+                            if result[2] == result[3]:
+                                spelare[str(a + 1)]["p"][8] = spelare[str(a + 1)]["p"][8] + result[0] + result[1] + result[2] + result[3]
+                            else:
+                                spelare[str(a + 1)]["p"][8] = spelare[str(a + 1)]["p"][8] + result[0] + result[1] + result[3] + result[4]
+                        if placera == 9:
+                            if result[0] == result[2]:
+                                spelare[str(a + 1)]["p"][9] = spelare[str(a + 1)]["p"][9] + result[0] + result[1] + result[2]
+                            else:
+                                spelare[str(a + 1)]["p"][9] = spelare[str(a + 1)]["p"][9] + result[-1] + result[-2] + result[-3]
+                        if placera == 10:
+                            spelare[str(a + 1)]["p"][10] = spelare[str(a + 1)]["p"][10] + result[-1] + result[-2] + result[-3] + result[-4]
+                        if placera == 11 or placera == 14:
+                            spelare[str(a + 1)]["p"][placera] = spelare[str(a + 1)]["p"][placera] + sum(tärningar)
+                        if placera == 12:
+                            spelare[str(a + 1)]["p"][12] = spelare[str(a + 1)]["p"][12] + 15
+                        if placera == 13:
+                            spelare[str(a + 1)]["p"][13] = spelare[str(a + 1)]["p"][13] + 20
+                        if placera == 15:
+                            spelare[str(a + 1)]["p"][15] = spelare[str(a + 1)]["p"][15] + 50
+                        spelare[str(a + 1)]["kategorier"].append(placera)
+                        for i in spelare[str(a + 1)]["strukna"]:
+                            spelare[str(a + 1)]["p"][i] = 0
+                        spelare[str(a + 1)]["poäng"] = spelare[str(a + 1)]["poäng"] + spelare[str(a + 1)]["p"][placera]
+                        for i in spelare[str(a + 1)]["strukna"]:
+                            spelare[str(a + 1)]["p"][i] = "-"
+                        if 1 and 2 and 3 and 4 and 5 and 6 in spelare[str(a + 1)]["kategorier"] and spelare[str(a + 1)]["FåttBonus"] == False:
+                            if spelare[str(a + 1)]["p"][1] + spelare[str(a + 1)]["p"][2] + spelare[str(a + 1)]["p"][3] + spelare[str(a + 1)]["p"][4] + spelare[str(a + 1)]["p"][5] + spelare[str(a + 1)]["p"][6] < 63:
+                                spelare[str(a + 1)]["FåttBonus"] = True  
+                            else:
+                                spelare[str(a + 1)]["poäng"] = spelare[str(a + 1)]["poäng"] + 50
+                                print("Dina poäng i övre halvan är nu över 63. 50 poäng bonus!")
+                                spelare[str(a + 1)]["FåttBonus"] = True
+                        if sum(spelare[str(a + 1)]["kategorier"]) == 120:
+                                print("Ditt protokoll är fyllt! Spelet är nu avslutat för spelare" + str(a + 1) + ". Ditt resultat:", spelare[str(a + 1)]["poäng"], "poäng!\n") 
+                                spelare[str(a + 1)]["Finished"] = True
+                        elif spelare[str(a + 1)]["Finished"] == False:
+                            print("Runda", runda, "avslutad. Du har nu", spelare[str(a + 1)]["p"][placera], "poäng i kategorin", kategorier2[placera], "och ditt totala resultat är", spelare[str(a + 1)]["poäng"], "poäng.")
+                            spela = input("Skriv s för att påbörja nästa runda.\n")
+                        placera = "0"
+        else:
+            0 #(startar om)
